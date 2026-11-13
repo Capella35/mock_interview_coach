@@ -4,8 +4,18 @@
 !.env.example
 *.pem
 *.key
+*.p12
+*.pfx
+*.keystore
 secrets/
 credentials*.json
+*service-account*.json
+*service_account*.json
+*-sa-key*.json
+*_key.json
+*-key.json
+token*.json
+client_secret*.json
 
 # --- Candidate data (real documents never go in git) --------------------
 /data/
@@ -21,18 +31,45 @@ redact_terms.txt
 *.pages
 !sample_data/**/*.pdf
 !sample_data/**/*.docx
-# Transcripts and audio recordings
+# Transcripts, sessions and audio recordings
 transcripts/
 recordings/
+/sessions/
 *.wav
 *.mp3
 *.m4a
 *.ogg
+*.oga
+*.opus
 *.flac
+*.aac
+*.aiff
 *.webm
+# Extracted personal data saved outside out/ (Fact Sheets, maps, redaction maps, run reports)
+fact_sheet*.json
+match_gap_map*.json
+redaction*.json
+run_report*.json
+# Local databases the app may create
+*.db
+*.sqlite
+*.sqlite3
+*.db-journal
+*.db-wal
+*.db-shm
 
-# --- Generated outputs --------------------------------------------------
+# --- Generated outputs, logs, caches ------------------------------------
 out/
+*.log
+logs/
+.cache/
+/models/
+*.gguf
+*.safetensors
+*.onnx
+*.pt
+*.pth
+*.ckpt
 
 # --- Python -------------------------------------------------------------
 __pycache__/
@@ -51,3 +88,5 @@ build/
 Thumbs.db
 .idea/
 .vscode/
+*.swp
+*~

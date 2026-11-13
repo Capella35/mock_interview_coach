@@ -4,9 +4,15 @@
     python scripts/check_private_data.py --staged   # what the pre-commit hook runs
     python scripts/check_private_data.py --all      # every tracked + untracked, not-ignored file
 
-Blocks:
-  - files in private folders (data/, out/, evals/private/), even if force-added
+Blocks (by path, even if force-added past .gitignore):
+  - files in private folders (data/, out/, evals/private/, sessions/, uploads/,
+    secrets/, any transcripts/ or recordings/ folder)
   - document files (.pdf .docx .doc .rtf .odt .pages) outside sample_data/
+  - secret files: .env* (except .env.example), credentials / service-account /
+    token / client_secret JSONs, .pem .key .p12 .pfx .keystore
+  - extracted personal data: fact_sheet / match_gap_map / redaction / run_report JSONs
+  - local databases, audio recordings, log files, model weights
+Blocks (by content):
   - API keys / private keys
   - email addresses, unless the domain is a reserved fictional one ("example")
   - phone numbers (the project's own detector; skipped in tests/, whose fixtures
@@ -32,9 +38,24 @@ sys.path.insert(0, str(ROOT / "src"))  # independent of the editable install (se
 
 from interview_agent.redact import Term, _email_hits, _phone_hits, _term_hits, load_terms  # noqa: E402
 
-PRIVATE_DIRS = ("data/", "out/", "evals/private/")
+PRIVATE_DIRS = ("data/", "out/", "evals/private/", "sessions/", "uploads/", "secrets/")
+PRIVATE_DIR_NAMES = ("transcripts", "recordings")  # anywhere in the path
 DOC_EXTENSIONS = (".pdf", ".docx", ".doc", ".rtf", ".odt", ".pages")
 DOCS_ALLOWED_UNDER = "sample_data/"
+# (suffixes, why) — blocked anywhere, even if force-added past .gitignore
+BLOCKED_SUFFIXES = (
+    ((".pem", ".key", ".p12", ".pfx", ".keystore"), "key / certificate file"),
+    ((".db", ".sqlite", ".sqlite3", ".db-journal", ".db-wal", ".db-shm"), "local database (may hold personal data)"),
+    ((".wav", ".mp3", ".m4a", ".ogg", ".oga", ".opus", ".flac", ".aac", ".aiff", ".webm"), "audio recording"),
+    ((".log",), "log file"),
+    ((".gguf", ".safetensors", ".onnx", ".pt", ".pth", ".ckpt"), "model weights / large binary"),
+)
+_SECRET_FILE_RE = re.compile(
+    r"(^|/)(\.env(\..+)?|credentials[^/]*\.json|[^/]*service[-_]account[^/]*\.json|[^/]*-sa-key[^/]*\.json"
+    r"|[^/]*[-_]key\.json|token[^/]*\.json|client_secret[^/]*\.json)$",
+    re.IGNORECASE,
+)
+_PERSONAL_JSON_RE = re.compile(r"(^|/)(fact_sheet|match_gap_map|redaction|run_report)[^/]*\.json$", re.IGNORECASE)
 TERMS_FILE = ROOT / "data" / "private" / "redact_terms.txt"
 
 _SECRET_RE = re.compile(
@@ -63,8 +84,17 @@ def check_path(path: str) -> list[str]:
     out = []
     if p.startswith(PRIVATE_DIRS):
         out.append(f"{path}: file is in a private folder ({p.split('/')[0]}/...) and must never be committed")
+    if any(part in PRIVATE_DIR_NAMES for part in p.split("/")[:-1]):
+        out.append(f"{path}: transcripts/recordings folder — personal data, never committed")
     if p.lower().endswith(DOC_EXTENSIONS) and not p.startswith(DOCS_ALLOWED_UNDER):
         out.append(f"{path}: document file outside {DOCS_ALLOWED_UNDER} (could be a real resume)")
+    if _SECRET_FILE_RE.search(p) and not p.endswith(".env.example"):
+        out.append(f"{path}: secrets/credentials file — only .env.example (fake values) may be committed")
+    if _PERSONAL_JSON_RE.search(p) and not p.startswith("tests/"):
+        out.append(f"{path}: extracted personal data (Fact Sheet / map / redaction / run report)")
+    for suffixes, why in BLOCKED_SUFFIXES:
+        if p.lower().endswith(suffixes):
+            out.append(f"{path}: {why}")
     return out
 
 

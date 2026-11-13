@@ -32,6 +32,33 @@ TERMS = parse_terms("name: Jamie Q Fictional\naddress: 12 Harbor Road")
         ("sample_data/jd_public.pdf", False),
         ("src/interview_agent/cli.py", False),
         ("evals/README.md", False),
+        # 1. secrets
+        (".env", True),
+        (".env.local", True),
+        ("config/.env.production", True),
+        (".env.example", False),
+        ("keys/server.pem", True),
+        ("gcp-service-account.json", True),
+        ("my-sa-key.json", True),
+        ("token.json", True),
+        ("client_secret_123.json", True),
+        ("cert.p12", True),
+        # 2. candidate data
+        ("transcripts/session1.txt", True),
+        ("src/transcripts/x.json", True),
+        ("recordings/answer.txt", True),
+        ("voice/answer.opus", True),
+        ("answer.wav", True),
+        ("fact_sheet.json", True),
+        ("exports/match_gap_map_2026.json", True),
+        ("sessions/s1.json", True),
+        ("app.db", True),
+        ("local.sqlite3", True),
+        ("src/interview_agent/schemas/models.py", False),
+        ("src/interview_agent/sessions/__init__.py", False),  # a future code package is fine
+        # 3. junk
+        ("app.log", True),
+        ("models/llm.gguf", True),
     ],
 )
 def test_paths(path, blocked):

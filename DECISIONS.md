@@ -50,7 +50,13 @@ A cloud LLM API may process the owner's real resume / LinkedIn / JD, under these
 Project renamed **Interview Agent**; Python package `interview_agent`. (Local folder name unchanged.)
 
 ### 2026-11-13 — Git safeguards
-Document files (`.pdf .docx .doc .rtf .odt .pages`) are gitignored everywhere except `sample_data/`. A versioned pre-commit hook (`.githooks/pre-commit` → `scripts/check_private_data.py`) blocks staged content containing: files from `data/`, `out/`, `evals/private/`; documents outside `sample_data/`; API/private keys; emails without a fictional `example` domain; phone numbers (outside `tests/`); local home paths; any value from `data/private/redact_terms.txt`. Repository to be **private** on GitHub for now. First commits go on a branch, not straight to the default branch.
+Document files (`.pdf .docx .doc .rtf .odt .pages`) are gitignored everywhere except `sample_data/`. A versioned pre-commit hook (`.githooks/pre-commit` → `scripts/check_private_data.py`) blocks staged content containing: files from `data/`, `out/`, `evals/private/`; documents outside `sample_data/`; API/private keys; emails without a fictional `example` domain; phone numbers (outside `tests/`); local home paths; any value from `data/private/redact_terms.txt`. First commits go on a branch, not straight to the default branch.
+
+### 2026-11-13 — Public GitHub repository
+Owner chose to publish to the **public** repo `Capella35/mock_interview_coach` (supersedes the earlier "private for now"). Commit author: `Capella35` with the GitHub noreply email. What may never be pushed, enforced by `.gitignore` **and** the pre-commit check (which also catches `git add -f`):
+1. **Secrets** — `.env*` except `.env.example` (fake values only), key/cert files, credentials / service-account / token / client_secret JSONs. If a secret is ever committed, deleting it is not enough: **rotate the key**.
+2. **Candidate data** — resumes and LinkedIn exports (incl. the owner's own; samples in git must be fictional), transcripts, audio recordings, sessions, extracted Fact Sheets / maps / redaction maps / run reports, local databases.
+3. **Local junk** — `.venv/`, caches, `.DS_Store`, editor settings, logs, model weights.
 
 ### 2026-11-12 — Repository layout
 - `src/interview_agent/schemas/` — Pydantic contracts (importable package, not a top-level folder).
