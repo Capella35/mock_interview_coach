@@ -14,7 +14,7 @@ from pathlib import Path
 
 import pytest
 
-FIX = "run:  chflags -R nohidden .venv   (see CLAUDE.md §4, 'Known env quirk')"
+FIX = "run:  chflags -R nohidden .venv   (see CLAUDE.md §4, 'Location')"
 
 
 @pytest.mark.skipif(sys.platform != "darwin", reason="macOS file flags only")

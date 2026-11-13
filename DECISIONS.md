@@ -58,6 +58,15 @@ Owner chose to publish to the **public** repo `Capella35/mock_interview_coach` (
 2. **Candidate data** — resumes and LinkedIn exports (incl. the owner's own; samples in git must be fictional), transcripts, audio recordings, sessions, extracted Fact Sheets / maps / redaction maps / run reports, local databases.
 3. **Local junk** — `.venv/`, caches, `.DS_Store`, editor settings, logs, model weights.
 
+### 2026-11-13 — Branches
+`main` is the default branch on GitHub (created from `milestone-1`, which was then deleted locally and remotely). New work goes on feature branches merged into `main`.
+
+### 2026-11-13 — Session records
+`BUILD_LOG.md` (append-only, one entry per session: built/changed, exact test results, unfinished items) and `HANDOFF.md` (overwritten each session: where things stand, next step, blockers, uncommitted files).
+
+### 2026-11-13 — Project location: outside iCloud
+Moved from `~/Desktop/FDE_Interview_Agent` (synced by iCloud Drive "Desktop & Documents") to `~/Projects/FDE_Interview_Agent`. Reasons: (a) iCloud re-hid `.venv` files, so Python skipped the editable install's `.pth` and the `interview-agent` command failed; (b) **privacy** — `data/private/` (real resume, LinkedIn, redaction maps with original contact values) and `out/` must stay on this Mac, not sync to iCloud. At the time of the move `data/private/` was empty, so no real personal data had been synced. `.venv` was rebuilt in the new location. The project must not be moved back into Desktop/Documents.
+
 ### 2026-11-12 — Repository layout
 - `src/interview_agent/schemas/` — Pydantic contracts (importable package, not a top-level folder).
 - `prompts/` — versioned prompt files at the top level.
@@ -73,7 +82,6 @@ Owner chose to publish to the **public** repo `Capella35/mock_interview_coach` (
 - **Voice stack.** Offline vs cloud? Which STT/TTS providers? Not decided. (Note only: Groq also offers speech-to-text — an option to evaluate, not a choice.)
 - **First test job description.** Databricks FDE vs Google FDE? Not decided. Plus: which non-FDE tech JD for the role-neutrality check?
 - **Groq data policy.** Does Groq's current free-tier API policy (retention, training use) fit our privacy decision? **Blocks the real-document validation run** until checked by the owner; does not block anything before it.
-- **Project location / iCloud.** The project lives on the Desktop, which iCloud Drive syncs. (a) iCloud re-hides `.venv` files, which breaks the `interview-agent` command (see CLAUDE.md §4). (b) **Privacy:** `data/private/` (real resume, LinkedIn, redaction maps with original contact values) and `out/` would be uploaded to iCloud — at odds with "stays in data/private, never sent". Options: move the project out of iCloud-synced folders (recommended; fixes both), or keep it and exclude `.venv` / `data` / `out` from iCloud (`.nosync` names + symlinks). **Blocks the real-document run** until decided.
 - **Which LLM model** on Groq for extraction and matching? Config only (`LLM_MODEL`), so no code depends on it. To be chosen before the first real run from Groq's current model list (needs strong JSON output and exact quoting).
 - **Web framework.** Not decided (not needed in M1).
 - **Database / storage.** Not decided (not needed in M1).
