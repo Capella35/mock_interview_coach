@@ -1,0 +1,3 @@
+# prompts/
+
+Every LLM prompt lives here as a versioned file (e.g. `extract_candidate.v1.md`, `match_gap.v1.md`) — never as a string buried in code; code loads prompts by name and version, and every output records which prompt version produced it. **Rule: a prompt change is a reviewable diff.** Don't edit a version that has been used for a recorded run — copy it to the next version (`.v2.md`), change that, and run the `evals/` golden set before switching to it. Core prompts must be **role-neutral**; anything specific to a role (FDE wording, personas, competencies) comes from the role pack, not from these files.

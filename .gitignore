@@ -1,0 +1,53 @@
+# --- Secrets -------------------------------------------------------------
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+secrets/
+credentials*.json
+
+# --- Candidate data (real documents never go in git) --------------------
+/data/
+/uploads/
+evals/private/
+redact_terms.txt
+# Document files anywhere (a resume dropped in the wrong folder) — except public samples
+*.pdf
+*.docx
+*.doc
+*.rtf
+*.odt
+*.pages
+!sample_data/**/*.pdf
+!sample_data/**/*.docx
+# Transcripts and audio recordings
+transcripts/
+recordings/
+*.wav
+*.mp3
+*.m4a
+*.ogg
+*.flac
+*.webm
+
+# --- Generated outputs --------------------------------------------------
+out/
+
+# --- Python -------------------------------------------------------------
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+*.egg-info/
+dist/
+build/
+
+# --- OS / editors -------------------------------------------------------
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/

@@ -1,0 +1,3 @@
+# evals/
+
+The golden test set: fixed inputs (resume + LinkedIn + JD) paired with expected outputs **written by the project owner** — which requirements must be found, the expected match/gap status of each, which metrics must be extracted, and claims that must never appear. **Rule: no prompt or model change is accepted until it passes these.** Unlike `tests/` (fast unit tests with a fake LLM), evals run the real pipeline against a real model. Cases built from fictional documents live here in git; cases built from the owner's real documents live in `evals/private/`, which is gitignored and never committed. Milestone 1 needs at least one FDE job description and one non-FDE tech job description.
